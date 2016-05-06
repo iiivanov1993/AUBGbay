@@ -1,0 +1,52 @@
+/*!
+ * Start Bootstrap - Business Frontpage HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body {
+    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+/* Header Image Background - Change the URL below to your image path (example: ../images/background.jpg) */
+
+.business-header {
+    -webkit-box-shadow: 14px 16px 24px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 14px 16px 24px 0px rgba(0,0,0,0.75);
+    box-shadow: 14px 16px 24px 0px rgba(0,0,0,0.75);
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 0px solid #000000;
+    margin-top: 10px;
+
+    height: 400px;
+    background: url('https://scontent-fra3-1.xx.fbcdn.net/t31.0-8/680574_10151364508368132_1984246134_o.jpg') center center no-repeat scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+/* Customize the text color and shadow color and to optimize text legibility. */
+
+.tagline {
+    text-shadow: 0 0 10px #000;
+    color: #fff;
+}
+
+.img-center {
+    margin: 0 auto;
+}
+
+footer {
+    margin: 50px 0;
+}
+
+.jumbotron-icon {
+  width: 100%;
+  font-size: 60px;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}

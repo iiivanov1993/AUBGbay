@@ -1,0 +1,127 @@
+﻿@model AUBGbay.Models.Classified
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/ContactSeller.js")"></script>
+    <script src="@Url.Content("~/Scripts/ImageSelector.js")"></script>  
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+}
+
+@section style
+{
+    <link href="@Url.Content("~/Content/DetailsPage.css")" rel="stylesheet" />
+}
+
+<h2>Details</h2>
+
+<div class="container-fluid">
+    <div class="content-wrapper">
+        <div class="item-container">
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="product col-md-5 service-image-left">
+
+@if (Model.Images.Any())
+{
+                        <center>
+                            <img id="item-display" src="data:image;base64,@System.Convert.ToBase64String(Model.Images.First().ImageContent)" alt="">
+                        </center>
+}
+                    </div>
+
+                    <div id="imageChooser" class="container service1-items col-sm-2 col-md-2 pull-left">
+                        @foreach (var image in Model.Images.Where(f => f.ClassifiedID == Model.ClassifiedID))
+                        {
+
+                            <a class="service1-item">
+                                <img src="data:image;base64,@System.Convert.ToBase64String(image.ImageContent)" alt="">
+                            </a>
+
+
+                        }
+
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="product-title">@Html.DisplayFor(model => model.Title)</div>
+                        <div class="product-desc">@Html.DisplayFor(model => model.ShortCaption)</div>
+                        @*<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>*@
+                        <hr>
+                        <div class="product-price">@Html.DisplayFor(model => model.Price) лв.</div>
+                        <div class="product-stock">In Stock</div>
+                        <hr>
+                        <div class="btn-group wishlist">
+                            <button id="showContactForm" type="button" class="btn btn-danger">
+                                Contact Seller
+                            </button>
+                        </div>
+
+
+                        @using (Ajax.BeginForm("SendEmail", "Classified", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess" }, new { id = "contactForm", hidden = string.Empty }))
+                        {
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @Html.HiddenFor(model => model.User.Email, new { @Name = "resEmail" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @Html.HiddenFor(model => model.Title, new { @Name = "subject" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">
+                                    Send @Html.DisplayFor(model => model.User.FirstName)
+                                    @Html.DisplayFor(model => model.User.LastName) an Email:
+                                </label>
+
+                                <textarea name="message" class="form-control" rows="5" id="email"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-info" value="Send email">
+                            </div>
+                            <div class="form-group">
+                                <div class="text-success" id="emailResult"></div>
+                            </div>
+                        }
+                        <hr>
+                        <div class="product-desc">
+                            Created by: @Html.DisplayFor(model => model.User.FirstName)
+                            @Html.DisplayFor(model => model.User.LastName)
+                        </div>
+                        <div class="product-desc">Created on: @Html.DisplayFor(model => model.DateCreated)</div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="col-md-12 product-info">
+                <ul id="myTab" class="nav nav-tabs nav_tabs">
+
+                    <li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
+
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="service-one">
+
+                        <section class="container product-info">
+                            @Html.DisplayFor(model => model.Description)
+                        </section>
+
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <p>
+            @Html.ActionLink("< Back to List", "Index", null, new { @class = "btn btn-success" })
+        </p>

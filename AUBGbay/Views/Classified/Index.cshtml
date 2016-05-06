@@ -1,0 +1,100 @@
+﻿@*@model IEnumerable<AUBGbay.Models.Classified>*@
+@model PagedList.IPagedList<AUBGbay.Models.Classified>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/Grid_List_Picker.js")"></script>
+}
+
+@section css
+{
+    <link href="@Url.Content("~/Content/List_Grid_Index.css")" rel="stylesheet" />
+}
+
+<h2>Classifieds</h2>
+
+
+
+<div class="well well-sm">
+    <strong>View:</strong>
+    <div class="btn-group">
+        <a href="#" id="list" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-th-list">
+            </span>List
+        </a> <a href="#" id="grid" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-th"></span>Grid
+        </a>
+    </div>
+</div>
+
+
+<div class="col-md-3">
+    @using (Html.BeginForm("Index", "Classified", FormMethod.Get))
+    {
+        <p>
+            Search for a classified: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" class="btn" value="Search" />
+        </p>
+    }
+    <p class="lead">Category:</p>
+    <div class="list-group">
+        @foreach (var category in ViewBag.Category)
+        {
+            <a href="@Url.Action("Category", "Classified", new { id = category.CategoryID})" class="list-group-item  @(ViewContext.RouteData.Values["Action"].ToString() == "Category" ? ViewContext.RouteData.Values["ID"].ToString() == category.CategoryID.ToString() ? "active": ""  : "")">@category.Name</a>
+        }
+    </div>
+    <p class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "hidden" : "")">
+        @Html.ActionLink("< Back to List", "Index", null, new { @class = "btn btn-success" })
+    </p>
+</div>
+
+
+<div class="col-md-9">
+    <div id="products" class="row list-group">
+        @foreach (var item in Model)
+        {
+            <div class="item  col-xs-4 col-lg-4">
+                <div class="thumbnail">
+                    @if (item.Images.Any(f => f.ClassifiedID == item.ClassifiedID))
+                    {
+                        <a href="@Url.Action("Details", "Classified", new { id = item.ClassifiedID })">
+                            <div class="aspect-ratio aspect-ratio-16-9 img-frame">
+                                <img id="imageHolder" href="@Url.Action("Details", "Classified", new { id = item.ClassifiedID })" class="group list-group-image" src="data:image;base64,@System.Convert.ToBase64String(item.Images.First().ImageContent)" alt="" />
+                            </div>
+                        </a>
+                    }
+                    <hr>
+                    <div class="caption">
+                        <h4 class="group inner list-group-item-heading">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </h4>
+                        <p class="group inner list-group-item-text">
+                            @Html.DisplayFor(modelItem => item.ShortCaption)
+                        </p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p id="priceHolder" class="lead">
+                                    @Html.DisplayFor(modelItem => item.Price) лв.
+                                </p>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                @Html.ActionLink("Details", "Details", new { id = item.ClassifiedID }, new { @class = "btn btn-success" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+</div>
